@@ -6,13 +6,16 @@ pipeline {
         DOCKER_TAG = 'version-1'             // Docker tag
         DOCKER_HUB_REPO = 'royjith/cube'      // Docker Hub repository
         DOCKER_HUB_CREDENTIALS_ID = 'dockerhub' // Docker Hub credentials ID
+        KUBE_CONFIG = '/tmp/kubeconfig'       // Path to the kubeconfig file
+        DEPLOYMENT_NAME = 'pipe'
+        NAMESPACE = 'default'                  // Kubernetes namespace to deploy to
     }
 
     stages {
         stage('Checkout') {
             steps {
                 echo 'Checking out code from Git...'
-                git branch: 'main', credentialsId: 'dockerhub', url: 'https://github.com/Royjith/docker.git'
+                git branch: 'main', url: 'https://github.com/Royjith/nginx-image.git'
             }
         }
 
