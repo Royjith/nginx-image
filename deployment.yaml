@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: pipeline-deployment1
-        image: royjith/cube:latest-v1.0
+        image: royjith/cube:version-1
         ports:
         - containerPort: 8080
 
