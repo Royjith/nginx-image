@@ -4,7 +4,7 @@ metadata:
   name: pipeline-deployment1
   namespace: default
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: pipeline-deployment1
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: pipeline-deployment1
-        image: royjith/cube:version-1
+        image: royjith/cube:version-2
         ports:
         - containerPort: 8080
 
