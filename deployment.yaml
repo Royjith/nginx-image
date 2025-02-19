@@ -17,7 +17,7 @@ spec:
       - name: pipeline-deployment1
         image: royjith/cube:version-2
         ports:
-        - containerPort: 8080
+        - containerPort: 80
 
 ---
 apiVersion: v1
