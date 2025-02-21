@@ -96,6 +96,9 @@ pipeline {
         }
 
         stage('Deploy to Kubernetes') {
+            when {
+                branch 'test'  // Only deploy on the 'main' branch
+            }
             steps {
                 input message: 'Approve Kubernetes Deployment?', ok: 'Deploy'  // Manual approval before deployment
                 script {
@@ -104,16 +107,23 @@ pipeline {
                     try {
                         // Set the kubeconfig file (for accessing the Kubernetes cluster)
                         withCredentials([file(credentialsId: 'pikube', variable: 'KUBECONFIG_FILE')]) {
+
                             // Define the path to your deployment.yaml file in the repository
                             def deploymentFile = 'deployment.yaml'  // Adjust path if necessary
 
                             // Verify if the deployment.yaml exists in the workspace
-                            sh "ls -al ${deploymentFile}"
+                            sh 'ls -al ${deploymentFile}'
 
                             // Update the Docker image in the deployment.yaml with the newly pushed image tag
                             echo "Updating Docker image in the deployment.yaml to ${DOCKER_HUB_REPO}:${DOCKER_TAG}"
                             sh """
                                 sed -i 's|image: .*|image: ${DOCKER_HUB_REPO}:${DOCKER_TAG}|g' ${deploymentFile}
+                            """
+
+                            // Dynamically update the namespace in deployment.yaml before applying
+                            echo "Updating namespace in deployment.yaml to ${NAMESPACE}"
+                            sh """
+                                sed -i 's|namespace: .*|namespace: ${NAMESPACE}|g' ${deploymentFile}
                             """
 
                             // Apply the updated deployment.yaml using kubectl
@@ -124,7 +134,7 @@ pipeline {
                             """
                         }
                     } catch (Exception e) {
-                        error "Kubernetes deployment failed: ${e.message}"  // Explicitly fail if Kubernetes deployment fails             
+                        error "Kubernetes deployment failed: ${e.message}"  // Explicitly fail if Kubernetes deployment fails
                     }
                 }
             }
