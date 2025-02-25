@@ -8,7 +8,7 @@ pipeline {
         DOCKER_HUB_CREDENTIALS_ID = 'dockerhub' // Docker Hub credentials ID
         KUBE_CONFIG = '/tmp/kubeconfig'       // Path to the kubeconfig file
         DEPLOYMENT_NAME = 'pipe'
-        NAMESPACE = 'default'                  // Kubernetes namespace to deploy to
+        NAMESPACE = 'stage'                  // Kubernetes namespace to deploy to
     }
 
     stages {
